@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import random
 import gevent
 import gevent.monkey
 from gevent.pywsgi import WSGIServer
@@ -12,8 +13,10 @@ app = Flask(__name__)
 def event_stream():
     count = 0
     while True:
+        x = random.uniform(-180, 180)
+        y = random.uniform(-90, 90)
         gevent.sleep(2)
-        yield 'data: %s\n\n' % count
+        yield 'retry:10000\ndata: {"type": "Feature","properties": {"name": "Coors Field","amenity": "Baseball Stadium","popupContent": "This is where the Rockies play!"},"geometry": {"type": "Point","coordinates": [%s, %s]}}\n\n' % (x, y)
         count += 1
 
 @app.route('/my_event_source')

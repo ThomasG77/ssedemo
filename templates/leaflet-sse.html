@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
+        <script type="text/javascript" src="static/eventsource.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.8.0.min.js"></script>
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js?2"></script>
+    </head>
+
+    <body>
+
+        <h2>Demo</h2>
+        <div id="map" style="width: 600px; height: 400px"></div>
+        
+        <ul id="output">
+
+        </ul>
+        <script type="text/javascript">
+            $(document).ready(
+                    function() {
+                    var map = L.map('map').setView([0, 0], 0);
+
+		            L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
+			            attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2012 CloudMade',
+			            key: 'BC9A493B41014CAABB98F0471D759707'
+		            }).addTo(map);
+                    geojson = new L.GeoJSON();
+                    map.addLayer(geojson);
+
+                        var sse = new EventSource('/my_event_source');
+                        sse.onmessage = function(message) {
+                            console.log('A message has arrived!');
+                            //$('#output').append('<li>'+message.data+'</li>');
+                            var data = JSON.parse(message.data);
+
+                            if (geojson.toGeoJSON().features.length >= 20) {
+                                geojson.addData(data);
+                                var newData = geojson.toGeoJSON().features;
+                                newData=JSON.parse(JSON.stringify(newData));
+                                newData.shift();
+                                geojson.clearLayers();
+                                geojson.addData(newData);
+                            } else  {
+                                geojson.addData(data);
+                            }
+                        }
+                        sse.onerror = function(e) {
+                          console.log("EventSource failed.");
+                        };
+                    });
+
+        </script>
+    </body>
+
+</html>
