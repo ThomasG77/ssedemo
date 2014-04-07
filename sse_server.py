@@ -15,7 +15,7 @@ def event_stream():
     while True:
         x = random.uniform(-180, 180)
         y = random.uniform(-90, 90)
-        gevent.sleep(2)
+        gevent.sleep(5)
         yield 'retry:10000\ndata: {"type": "Feature","properties": {"name": "Coors Field","amenity": "Baseball Stadium","popupContent": "This is where the Rockies play!"},"geometry": {"type": "Point","coordinates": [%s, %s]}}\n\n' % (x, y)
         count += 1
 
@@ -27,8 +27,8 @@ def sse_request():
 
 @app.route('/')
 def page():
-    return render_template('sse.html')
+    return render_template('leaflet-sse.html')
 
 if __name__ == '__main__':
-    http_server = WSGIServer(('127.0.0.1', 8001), app)
+    http_server = WSGIServer(('0.0.0.0', 8001), app)
     http_server.serve_forever()

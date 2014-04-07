@@ -20,10 +20,9 @@
             $(document).ready(
                     function() {
                     var map = L.map('map').setView([0, 0], 0);
-
-		            L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
-			            attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2012 CloudMade',
-			            key: 'BC9A493B41014CAABB98F0471D759707'
+http://mapequalsyes-tiles.stamen.com/trunk_fp/12/002/073/001/410.png
+		            L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+			            attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2012 MapQuest'
 		            }).addTo(map);
                     geojson = new L.GeoJSON();
                     map.addLayer(geojson);
@@ -34,7 +33,7 @@
                             //$('#output').append('<li>'+message.data+'</li>');
                             var data = JSON.parse(message.data);
 
-                            if (geojson.toGeoJSON().features.length >= 20) {
+                            if (geojson.toGeoJSON().features.length >= 10) {
                                 geojson.addData(data);
                                 var newData = geojson.toGeoJSON().features;
                                 newData=JSON.parse(JSON.stringify(newData));
